@@ -1,0 +1,2075 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+    border-right: 1px solid #eee;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.categories button {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f5f7fa;
+    color: #666;
+    font-size: 14px;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.categories button:hover {
+    background-color: #e6f7ff;
+    color: #1890ff;
+}
+
+.categories button.active {
+    background-color: #1890ff;
+    color: white;
+}
+
+.categories button.active:hover {
+    background-color: #40a9ff;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 24px;
+    background-color: #fff;
+    margin: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+#import {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+#import:hover {
+    background-color: #40a9ff;
+}
+
+#search {
+    flex: 1;
+    max-width: 400px;
+    padding: 8px 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>');
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    padding-left: 40px;
+}
+
+#search:focus {
+    outline: none;
+    border-color: #52c41a;
+    box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.2);
+}
+
+#search::placeholder {
+    color: #999;
+}
+
+.material-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+/* 为素材卡片预留样式 */
+.material-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 2px solid #000000;
+}
+
+.material-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px solid #333333;
+}
+
+/* 添加响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .categories {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .categories button {
+        width: auto;
+    }
+    
+    .main-content {
+        margin: 10px;
+    }
+    
+    .material-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+    }
+} 
+
+/* 在现有样式的基础上添加以下内容 */
+
+.material-card .preview {
+    height: 150px;
+    background-color: #f5f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.video-preview, .audio-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+.material-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.material-card .info {
+    padding: 12px;
+    border-top: 2px solid #000000;
+}
+
+.material-card .filename {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} 
+
+.settings {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.current-path {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+    word-break: break-all;
+}
+
+#storage-path {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+#storage-path:hover {
+    border-color: #1890ff;
+    color: #1890ff;
+} 
+
+.video-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #000;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.video-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.play-icon, .fullscreen-icon {
+    color: white;
+    font-size: 32px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.play-icon:hover, .fullscreen-icon:hover {
+    transform: scale(1.2);
+}
+
+/* 全屏时的视频样式 */
+video:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+    background: black;
+}
+
+/* 标签相关样式 */
+.tags-section {
+    margin-top: 20px;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+}
+
+.tags-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.tag {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background-color: #e6f7ff;
+}
+
+.tag.active {
+    background-color: #1890ff;
+    color: white;
+}
+
+.tag .remove {
+    margin-left: 5px;
+    color: #999;
+}
+
+.tag .remove:hover {
+    color: #ff4d4f;
+}
+
+/* 添加标签移除按钮样式 */
+.tag .remove-tag {
+    margin-left: 4px;
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 14px;
+    text-align: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.tag .remove-tag:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+/* 修改标签样式，使其包含移除按钮 */
+.tag {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background-color: #e6f7ff;
+}
+
+/* 模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close {
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close:hover {
+    color: #666;
+}
+
+.add-tag-section {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#new-tag-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#add-tag-btn {
+    padding: 8px 16px;
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+#add-tag-btn:hover {
+    opacity: 0.8;
+}
+
+.tags-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.tag-list-item {
+    margin-bottom: 0;
+    background: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tag-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+.tag-name {
+    flex: 1;
+    margin-right: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.tag-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tag-actions button {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #666;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.edit-tag-btn:hover {
+    background-color: #e6f7ff;
+    color: #1890ff;
+}
+
+.delete-tag-btn:hover {
+    background-color: #fff1f0;
+    color: #ff4d4f;
+}
+
+/* 标签编辑表单样式 */
+.tag-edit-form {
+    display: none;
+    padding: 8px 12px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+}
+
+.edit-tag-input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.edit-actions button {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.save-edit-btn {
+    background-color: #1890ff;
+    color: white;
+}
+
+.cancel-edit-btn {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* 美化滚动条 */
+.tags-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tags-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.tags-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.tags-list::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* 文件卡片中的标签样式 */
+.material-card .tags {
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-top: 2px solid #000000;
+    margin-top: 8px;
+}
+
+.material-card .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    background-color: #f5f5f5;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    color: #000000;
+    transition: all 0.3s ease;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.material-card .tag:hover {
+    background-color: #e8e8e8;
+    border-color: #666666;
+    color: #333333;
+    transform: translateY(-1px);
+}
+
+/* 添加标签按钮样式 */
+.material-card .add-tags-btn {
+    padding: 2px 8px;
+    background-color: transparent;
+    border: 1px dashed #b7eb8f;
+    border-radius: 12px;
+    font-size: 11px;
+    color: #52c41a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.material-card .add-tags-btn:hover {
+    border-color: #52c41a;
+    color: #389e0d;
+    background-color: #f6ffed;
+}
+
+/* 文件信息布局优化 */
+.material-card .info {
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+}
+
+.material-card .filename {
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.material-card .filesize {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+}
+
+/* 卡片整体样式优化 */
+.material-card {
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.material-card:hover {
+    border-color: #e6f7ff;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+}
+
+/* 分类按钮样式 */
+.category-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background-color: #f5f7fa;
+    color: #666;
+    font-size: 14px;
+    text-align: left;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-btn:hover {
+    background-color: #e6f7ff;
+    color: #1890ff;
+    transform: translateX(4px);
+}
+
+.category-btn.active {
+    background-color: #1890ff;
+    color: white;
+    transform: translateX(4px);
+}
+
+.category-btn .icon {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.category-btn .text {
+    flex: 1;
+    font-weight: 500;
+}
+
+.category-btn .count {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.category-btn:hover .count {
+    background-color: rgba(24, 144, 255, 0.2);
+}
+
+.category-btn.active .count {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 添加动画效果 */
+.category-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    transition: transform 0.5s;
+}
+
+.category-btn:active::after {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+} 
+
+.settings-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.settings-buttons button {
+    flex: 1;
+}
+
+.secondary-btn {
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.secondary-btn:hover {
+    border-color: #1890ff;
+    color: #1890ff;
+}
+
+.secondary-btn .icon {
+    font-size: 14px;
+} 
+
+/* 修改代码预览样式 */
+.code-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #282c34;
+    color: #abb2bf;
+    overflow: hidden;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+/* 添加覆盖层样式 */
+.code-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(40, 44, 52, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.material-card:hover .code-overlay {
+    opacity: 1;
+}
+
+/* 修改代码卡片中的打开按钮样式 */
+.code-preview .open-folder-btn {
+    position: static;
+    transform: none;
+    background-color: rgba(171, 178, 191, 0.2);
+    border: 1px solid rgba(171, 178, 191, 0.3);
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 14px;
+    opacity: 1;
+}
+
+.code-preview .open-folder-btn:hover {
+    background-color: #abb2bf;
+    color: #282c34;
+    transform: scale(1.05);
+}
+
+.code-preview .folder-open-icon {
+    font-size: 16px;
+} 
+
+/* 文件夹预览样式 */
+.folder-preview {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(135deg, #e6f7ff 0%, #f0f5ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s ease;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    border: 2px solid #000000;
+    border-bottom: none;
+}
+
+.folder-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.folder-icon {
+    font-size: 56px;
+    color: #1890ff;
+    filter: drop-shadow(0 2px 4px rgba(24, 144, 255, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.folder-items-count {
+    position: absolute;
+    bottom: -2px;
+    right: -8px;
+    background-color: #1890ff;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.folder-info {
+    text-align: center;
+    padding: 0 16px;
+}
+
+.folder-name {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 4px;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.folder-details {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+    justify-content: center;
+}
+
+.material-card:hover .folder-icon {
+    transform: scale(1.1);
+}
+
+.material-card:hover .folder-preview {
+    background: linear-gradient(135deg, #bae7ff 0%, #e6f7ff 100%);
+    border: 2px solid #333333;
+    border-bottom: none;
+} 
+
+/* 文件夹打开按钮样式 */
+.open-folder-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 12px;
+    background-color: rgba(24, 144, 255, 0.1);
+    border: 1px solid rgba(24, 144, 255, 0.2);
+    border-radius: 4px;
+    color: #1890ff;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.material-card:hover .open-folder-btn {
+    opacity: 1;
+}
+
+.open-folder-btn:hover {
+    background-color: #1890ff;
+    color: white;
+}
+
+.folder-open-icon {
+    font-size: 14px;
+} 
+
+/* 代码卡片中的打开按钮样式 */
+.code-preview .open-folder-btn {
+    background-color: rgba(171, 178, 191, 0.1);
+    border: 1px solid rgba(171, 178, 191, 0.2);
+    color: #abb2bf;
+}
+
+.code-preview .open-folder-btn:hover {
+    background-color: #abb2bf;
+    color: #282c34;
+}
+
+/* 确保按钮在代码预览中正确显示 */
+.code-preview {
+    position: relative;
+    padding-bottom: 40px; /* 为按钮留出空间 */
+}
+
+.code-preview .code-content {
+    height: calc(100% - 40px); /* 调整内容区域高度 */
+} 
+
+/* 照片详情对话框样式 */
+.image-detail-content {
+    width: 90% !important;
+    max-height: 90vh;
+    margin: 5vh auto !important;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.image-detail-content .modal-body {
+    flex: 1;
+    overflow: hidden;  /* 改为 hidden 以防止滚动条 */
+    padding: 20px;
+    background: #f5f5f5;
+    min-height: 200px;
+    max-height: calc(90vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;  /*  center 使图片居中 */
+    position: relative;   /* 添加相对定位 */
+}
+
+.image-detail-content img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    -webkit-user-select: none;  /* Safari */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* IE/Edge */
+    user-select: none;          /* 标准语法 */
+    transform-origin: center center;
+    transition: transform 0.1s ease;
+    will-change: transform;     /* 优化性能 */
+}
+
+/* 添加抓取手型光标样式 */
+.image-detail-content img:active {
+    cursor: grabbing !important;
+}
+
+/* 美化滚动条 */
+.image-detail-content .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.image-detail-content .modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.image-detail-content .modal-body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.image-detail-content .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.modal-header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.close {
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #666;
+}
+
+.modal-body {
+    padding: 20px;
+    background: #f5f5f5;
+} 
+
+/* 音频播放器样式 */
+.audio-preview {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ec 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+.audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.audio-play-icon {
+    font-size: 32px;
+    color: #1890ff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.audio-play-icon:hover {
+    transform: scale(1.1);
+}
+
+.audio-info {
+    text-align: center;
+}
+
+.audio-format {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.audio-time {
+    font-size: 12px;
+    color: #999;
+}
+
+.audio-progress {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.audio-progress::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 10px;
+    height: 4px;
+    background-color: #1890ff;
+    border-radius: 2px;
+    transition: height 0.2s ease;
+}
+
+/* 进度条拖动时的样式 */
+.audio-progress:hover .progress-bar {
+    height: 6px;
+}
+
+/* 添加进度条拖动点 */
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #1890ff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.audio-progress:hover .progress-bar::after {
+    opacity: 1;
+}
+
+/* 音频预览中的打开置按钮样式 */
+.audio-preview .open-folder-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(24, 144, 255, 0.1);
+    border: 1px solid rgba(24, 144, 255, 0.2);
+    color: #1890ff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.audio-preview .open-folder-btn:hover {
+    background-color: #1890ff;
+    color: white;
+} 
+
+/* 卡片操作按钮样式 */
+.card-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.delete-btn {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    color: #ff3b30;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.delete-btn:hover {
+    background: #ff3b30;
+    color: white;
+    transform: scale(1.1);
+}
+
+.delete-icon {
+    font-size: 16px;
+}
+
+/* 确保预览容器支持定 */
+.preview {
+    position: relative;
+} 
+
+/* 确认对话框样式 */
+.confirm-dialog-content {
+    width: 400px !important;
+    padding: 24px !important;
+    text-align: center;
+    border-radius: 8px !important;
+}
+
+.confirm-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.confirm-title {
+    color: #333;
+    font-size: 20px;
+    margin: 0 0 16px 0;
+}
+
+.confirm-message {
+    color: #666;
+    margin: 0 0 24px 0;
+    padding: 0 16px;
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.confirm-buttons button {
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.cancel-btn:hover {
+    background-color: #e8e8e8;
+}
+
+.confirm-btn {
+    background-color: #ff3b30;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #ff1f1f;
+} 
+
+/* 修改图片预览覆盖样式 */
+.image-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding-bottom: 10px;
+}
+
+/* 修改图片预览中打开置按钮的样式 */
+.image-preview .open-folder-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.image-preview .open-folder-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.material-card:hover .image-overlay {
+    opacity: 1;
+} 
+
+/* 修改视频覆盖层样式 */
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+/* 添加视频控制按钮容器样式 */
+.video-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+/* 修改全屏按钮样式 */
+.fullscreen-icon {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    color: white;
+    font-size: 24px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+/* 修改播放按钮样式，保持居中 */
+.play-icon {
+    color: white;
+    font-size: 32px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.play-icon:hover, .fullscreen-icon:hover {
+    transform: scale(1.2);
+} 
+
+/* 添加图片控制按钮容器样式 */
+.image-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+/* 修改图片预览中的全屏按���样式 */
+.image-preview .fullscreen-icon {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    color: white;
+    font-size: 24px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.image-preview .fullscreen-icon:hover {
+    transform: scale(1.2);
+} 
+
+/* 修改代码详情对话框的样式 */
+.code-detail-content {
+    width: 90%;
+    max-height: 90vh;
+    margin: 5vh auto;
+    display: flex;
+    flex-direction: column;
+    background: #282c34;  /* 深色背景 */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.code-detail-content .modal-header {
+    padding: 16px 24px;
+    background: #21252b;  /* 稍深的背景 */
+    border-bottom: 1px solid #181a1f;
+}
+
+.code-detail-content .modal-header h2 {
+    color: #abb2bf;  /* 浅色文本 */
+    margin: 0;
+    font-size: 18px;
+}
+
+.code-detail-content .close {
+    color: #abb2bf;
+}
+
+.code-detail-content .modal-body {
+    flex: 1;
+    overflow: auto;
+    padding: 0;
+    background: #282c34;
+}
+
+.code-detail-content pre {
+    margin: 0;
+    padding: 16px 24px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #abb2bf;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* 美化滚动条 */
+.code-detail-content .modal-body::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.code-detail-content .modal-body::-webkit-scrollbar-track {
+    background: #21252b;
+}
+
+.code-detail-content .modal-body::-webkit-scrollbar-thumb {
+    background: #4b5363;
+    border: 3px solid #21252b;
+    border-radius: 6px;
+}
+
+.code-detail-content .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #5c6370;
+}
+
+/* 通用模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* 各种类型卡片的边框样式 */
+.material-card.folder-card,
+.material-card.image-card,
+.material-card.video-card,
+.material-card.audio-card,
+.material-card.code-card {
+    border: 2px solid #000000;
+}
+
+.material-card.folder-card:hover,
+.material-card.image-card:hover,
+.material-card.video-card:hover,
+.material-card.audio-card:hover,
+.material-card.code-card:hover {
+    border: 2px solid #333333;
+}
+
+/* 各类型片的信息区域样式 */
+.material-card.folder-card .info,
+.material-card.image-card .info,
+.material-card.video-card .info,
+.material-card.audio-card .info,
+.material-card.code-card .info {
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+    border: 2px solid #000000;
+    border-top: none;
+}
+
+.material-card.folder-card:hover .info,
+.material-card.image-card:hover .info,
+.material-card.video-card:hover .info,
+.material-card.audio-card:hover .info,
+.material-card.code-card:hover .info {
+    border: 2px solid #333333;
+    border-top: none;
+} 
+
+/* 图标卡片样式 */
+.icon-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #f5f7fa;
+    overflow: hidden;
+}
+
+.icon-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding-bottom: 10px;
+}
+
+.material-card.icon-card {
+    border: 2px solid #000000;
+}
+
+.material-card.icon-card:hover {
+    border: 2px solid #333333;
+}
+
+.material-card.icon-card .info {
+    border: 2px solid #000000;
+    border-top: none;
+}
+
+.material-card.icon-card:hover .info {
+    border: 2px solid #333333;
+    border-top: none;
+}
+
+.material-card:hover .icon-overlay {
+    opacity: 1;
+}
+
+.icon-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+} 
+
+/* 笔记预览样式 */
+.note-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #f8f9fa;
+    padding: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* 水平居中 */
+}
+
+/* 笔记内容区域样式 */
+.note-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;  /* 给顶部类型标签留出空间 */
+}
+
+/* 笔记卡片的打开位置按钮样式 */
+.note-preview .open-folder-btn {
+    position: absolute;  /* 使用绝对定位 */
+    top: 50%;          /* 垂直居中 */
+    left: 50%;         /* 水平居中 */
+    transform: translate(-50%, -50%);  /* 完全居中 */
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    z-index: 2;  /* 确保按钮在其他元素上 */
+}
+
+/* 文件图标和文件名样式 */
+.note-preview .file-icon {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 8px;
+    opacity: 0.7;  /* 降低图标透明度，让按钮更突出 */
+}
+
+.note-preview .file-name {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    word-break: break-all;
+    padding: 0 10px;
+    opacity: 0.7;  /* 降低文件名透明度，让按钮更突出 */
+}
+
+/* 按钮悬停效果 */
+.note-preview .open-folder-btn:hover {
+    background-color: #fff;
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: translate(-50%, -50%) scale(1.05);  /* 保持居中的同时添加缩放效果 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+} 
+
+/* 修改工具栏样式 */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+/* 搜索和标签容器 */
+.search-tags-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 300px;
+}
+
+/* 标签筛选容器 */
+.tags-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 标签样式 */
+.tags-filter-container .tag {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tags-filter-container .tag:hover {
+    background-color: #e6f7ff;
+}
+
+.tags-filter-container .tag.active {
+    background-color: #1890ff;
+    color: white;
+}
+
+/* 管理标签按钮样式 */
+#manage-tags {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+#manage-tags:hover {
+    border-color: #1890ff;
+    color: #1890ff;
+} 
+
+/* 添加 AE 预览样式 */
+.ae-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #1a1a1a;  /* AE深色背景 */
+    padding: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+}
+
+.ae-type {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 12px;
+    color: #9999ff;  /* AE特色紫色 */
+    font-weight: bold;
+}
+
+.ae-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.ae-content .file-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.ae-content .file-name {
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    word-break: break-all;
+    padding: 0 10px;
+}
+
+/* 修改 AE 卡片样式 */
+.material-card.ae-card {
+    border: 2px solid #9999ff;
+}
+
+.material-card.ae-card:hover {
+    border: 2px solid #b3b3ff;
+}
+
+.material-card.ae-card .info {
+    border: 2px solid #9999ff;
+    border-top: none;
+}
+
+.material-card.ae-card:hover .info {
+    border: 2px solid #b3b3ff;
+    border-top: none;
+} 
+
+/* 添加模型预览样式 */
+.model-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #2a2a2a;
+    padding: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+}
+
+.model-type {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 12px;
+    color: #66ccff;
+    font-weight: bold;
+}
+
+.model-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.model-content .file-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.model-content .file-name {
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    word-break: break-all;
+    padding: 0 10px;
+}
+
+/* 修改模型卡片样式 */
+.material-card.model-card {
+    border: 2px solid #66ccff;
+}
+
+.material-card.model-card:hover {
+    border: 2px solid #99ddff;
+}
+
+.material-card.model-card .info {
+    border: 2px solid #66ccff;
+    border-top: none;
+}
+
+.material-card.model-card:hover .info {
+    border: 2px solid #99ddff;
+    border-top: none;
+} 
+
+/* 在文件末尾添加笔记和PPT卡片的边框样式 */
+.material-card.note-card,
+.material-card.ppt-card {
+    border: 2px solid #000000;
+}
+
+.material-card.note-card:hover,
+.material-card.ppt-card:hover {
+    border: 2px solid #333333;
+}
+
+.material-card.note-card .info,
+.material-card.ppt-card .info {
+    border: 2px solid #000000;
+    border-top: none;
+}
+
+.material-card.note-card:hover .info,
+.material-card.ppt-card:hover .info {
+    border: 2px solid #333333;
+    border-top: none;
+} 
+
+/* 修改图标预览样式 */
+.icon-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #f5f7fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+}
+
+.icon-type {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 12px;
+    color: #666;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.icon-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.icon-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.icon-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding-bottom: 10px;
+}
+
+.material-card:hover .icon-overlay {
+    opacity: 1;
+} 
+
+/* 添加项目预览相关样式 */
+.project-preview {
+    padding: 15px;
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+}
+
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.project-icon {
+    font-size: 40px;
+    opacity: 0.8;
+}
+
+.project-details {
+    flex: 1;
+}
+
+.project-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.project-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.stat-label {
+    color: rgba(255, 255, 255, 0.7);
+    margin-right: 5px;
+}
+
+.stat-value {
+    font-weight: 500;
+}
+
+/* 修改代码预览的悬停效果 */
+.material-card.code-card:hover .code-overlay {
+    opacity: 1;
+}
+
+.project-preview .code-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 添加标签对话框样式 */
+.tag-dialog {
+    position: fixed;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    min-width: 300px;  /* 增加最小宽度 */
+    max-width: 400px;  /* 增加最大宽度 */
+}
+
+.tag-dialog-content {
+    padding: 16px;
+}
+
+.tag-dialog h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.available-tags {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* 分为两列 */
+    gap: 8px;  /* 添加间距 */
+    padding-right: 8px;  /* 为滚动条留出空间 */
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    cursor: pointer;
+    background: #f5f5f5;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.tag-item:hover {
+    background: #e6f7ff;
+}
+
+.tag-item input {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.tag-item span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 美化滚动条 */
+.available-tags::-webkit-scrollbar {
+    width: 6px;
+}
+
+.available-tags::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.available-tags::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.available-tags::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.tag-dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+}
+
+.tag-dialog-buttons button {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.tag-dialog-buttons .cancel-btn {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.tag-dialog-buttons .save-btn {
+    background-color: #1890ff;
+    color: white;
+}
+
+.tag-dialog-buttons button:hover {
+    opacity: 0.8;
+}
+  

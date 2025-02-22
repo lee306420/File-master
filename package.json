@@ -1,0 +1,65 @@
+{
+  "name": "material-manager",
+  "version": "1.0.0",
+  "description": "多媒体素材管理器",
+  "main": "main.js",
+  "author": "Your Name",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder",
+    "build:dmg": "electron-builder --mac dmg"
+  },
+  "build": {
+    "appId": "com.yourcompany.materialmanager",
+    "productName": "素材管理器",
+    "directories": {
+      "buildResources": "build",
+      "output": "./release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "build/icon.png"
+    },
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "unicode": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "devDependencies": {
+    "dmg-license": "^1.0.11",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.13.3"
+  },
+  "config": {
+    "electron_mirror": "https://cdn.npmmirror.com/binaries/electron/",
+    "electron_builder_binaries_mirror": "https://cdn.npmmirror.com/binaries/electron-builder-binaries/",
+    "electron_custom_dir": "{{ version }}"
+  }
+}

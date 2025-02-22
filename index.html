@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>素材管理器</title>
+    <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="categories">
+                <button id="folders" class="category-btn">
+                    <span class="icon">📁</span>
+                    <span class="text">文件夹</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="videos" class="category-btn">
+                    <span class="icon">🎬</span>
+                    <span class="text">视频</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="photos" class="category-btn">
+                    <span class="icon">🖼️</span>
+                    <span class="text">照片</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="audio" class="category-btn">
+                    <span class="icon">🎵</span>
+                    <span class="text">音频</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="code" class="category-btn">
+                    <span class="icon">📝</span>
+                    <span class="text">代码</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="icons" class="category-btn">
+                    <span class="icon">🎨</span>
+                    <span class="text">图标</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="notes" class="category-btn">
+                    <span class="icon">📒</span>
+                    <span class="text">笔记</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="ppt" class="category-btn">
+                    <span class="icon">📊</span>
+                    <span class="text">PPT</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="ae" class="category-btn">
+                    <span class="icon">🎬</span>
+                    <span class="text">AE</span>
+                    <span class="count">0</span>
+                </button>
+                <button id="models" class="category-btn">
+                    <span class="icon">🎮</span>
+                    <span class="text">模型</span>
+                    <span class="count">0</span>
+                </button>
+            </div>
+            <div class="settings">
+                <div class="settings-buttons">
+                    <button id="storage-path">设置存储位置</button>
+                    <button id="open-storage" class="secondary-btn">
+                        <span class="icon">📂</span>
+                        打开位置
+                    </button>
+                    <button id="open-user-data" class="secondary-btn">
+                        <span class="icon">⚙️</span>
+                        配置目录
+                    </button>
+                </div>
+                <div id="current-path" class="current-path"></div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="toolbar">
+                <button id="import">导入文件</button>
+                <div class="search-tags-container">
+                    <input type="search" id="search" placeholder="搜索素材...">
+                    <div class="tags-filter-container">
+                        <div class="tags-container" id="tags-filter">
+                            <!-- 标签将在这里动态显示 -->
+                        </div>
+                    </div>
+                </div>
+                <button id="manage-tags" class="secondary-btn">管理标签</button>
+            </div>
+            <div id="material-grid" class="material-grid">
+                <!-- 素材将在这里显示 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 标签管理话框 -->
+    <div id="tags-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>标签管理</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="add-tag-section">
+                    <input type="text" id="new-tag-input" placeholder="输入新标签名称">
+                    <button id="add-tag-btn">添加标签</button>
+                </div>
+                <div class="tags-list" id="tags-list">
+                    <!-- 现有标签将在这里显示 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="code-detail-modal" class="modal">
+        <div class="code-detail-content">
+            <div class="modal-header">
+                <h2 id="code-filename"></h2>
+                <span id="close-code-detail" class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <pre id="code-content"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div id="image-detail-modal" class="modal">
+        <div class="modal-content image-detail-content">
+            <div class="modal-header">
+                <h2 id="image-filename">图片名称</h2>
+                <span class="close" id="close-image-detail">×</span>
+            </div>
+            <div class="modal-body">
+                <img id="image-content" class="image-detail-content" alt="图片预览">
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-dialog" class="modal">
+        <div class="modal-content confirm-dialog-content">
+            <div class="confirm-icon">⚠️</div>
+            <h2 class="confirm-title">确认删除</h2>
+            <p class="confirm-message"></p>
+            <div class="confirm-buttons">
+                <button class="cancel-btn">取消</button>
+                <button class="confirm-btn">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/scripts/renderer.js"></script>
+</body>
+</html> 
