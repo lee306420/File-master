@@ -1169,29 +1169,33 @@ video:fullscreen {
 }
 
 .delete-btn {
-    background: rgba(255, 59, 48, 0.1);
-    border: 1px solid rgba(255, 59, 48, 0.2);
-    color: #ff3b30;
-    width: 32px;
-    height: 32px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
+    font-size: 16px;
+    color: #ff4d4f;
     z-index: 10;
+    transition: all 0.3s ease;
+    opacity: 0;  /* 默认隐藏 */
+}
+
+.material-card:hover .delete-btn {
+    opacity: 1;  /* 鼠标悬停时显示 */
 }
 
 .delete-btn:hover {
-    background: #ff3b30;
+    background: #ff4d4f;
     color: white;
     transform: scale(1.1);
-}
-
-.delete-icon {
-    font-size: 16px;
 }
 
 /* 确保预览容器支持定 */
@@ -1374,7 +1378,7 @@ video:fullscreen {
     z-index: 2;
 }
 
-/* 修改图片预览中的全屏按���样式 */
+/* 修改图片预览中的全屏按钮样式 */
 .image-preview .fullscreen-icon {
     position: absolute;
     top: 8px;

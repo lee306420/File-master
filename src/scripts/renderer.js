@@ -467,29 +467,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const card = document.createElement('div')
         card.className = 'material-card'
         
-        const type = file.type.toLowerCase()
-        
-        // 根据文件类型添加对应的类
-        if (file.type === 'folder') {
-            card.classList.add('folder-card')
-        } else if (['.jpg', '.png', '.gif'].includes(type)) {
-            card.classList.add('image-card')
-        } else if (['.mp4', '.avi', '.mov'].includes(type)) {
-            card.classList.add('video-card')
-        } else if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(type)) {
-            card.classList.add('audio-card')
-        } else if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(type)) {
-            card.classList.add('code-card')
-        } else if (['.ico', '.icns', '.svg'].includes(type)) {
-            card.classList.add('icon-card')
-        } else if (['.txt', '.md', '.doc', '.docx', '.pdf'].includes(type)) {
-            card.classList.add('note-card')
-        } else if (['.ppt', '.pptx'].includes(type)) {
-            card.classList.add('ppt-card')
-        } else if (['.fbx', '.obj', '.max', '.c4d', '.blend', '.3ds', '.dae', '.pth', '.glb'].includes(type)) {
-            card.classList.add('model-card')
-        }
-        
         let preview = ''
         
         // 根据文件类型生成不同的预览
@@ -503,7 +480,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         打开位置
                     </button>
                 </div>`
-        } else if (['.jpg', '.png', '.gif'].includes(type)) {
+        } else if (['.jpg', '.png', '.gif'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="image-preview">
                     <img src="file://${file.path}" alt="${file.name}" style="width: 100%; height: 150px; object-fit: cover;">
@@ -517,7 +494,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </div>`
-        } else if (['.mp4', '.avi', '.mov'].includes(type)) {
+        } else if (['.mp4', '.avi', '.mov'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="video-preview">
                     <video src="file://${file.path}" style="width: 100%; height: 150px; object-fit: cover;"></video>
@@ -532,14 +509,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </div>`
-        } else if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(type)) {
+        } else if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="audio-preview">
                     <audio src="file://${file.path}"></audio>
                     <div class="audio-controls">
                         <i class="audio-play-icon">▶</i>
                         <div class="audio-info">
-                            <div class="audio-format">${type.slice(1).toUpperCase()}</div>
+                            <div class="audio-format">${file.type.slice(1).toUpperCase()}</div>
                             <div class="audio-time">00:00</div>
                         </div>
                     </div>
@@ -551,7 +528,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         打开位置
                     </button>
                 </div>`
-        } else if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(type) || file.type === '.project') {
+        } else if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(file.type.toLowerCase()) || file.type === '.project') {
             let previewContent = ''
             
             if (file.type === '.project') {
@@ -580,7 +557,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const fileContent = await window.electronAPI.readFileContent(file.path)
                 preview = `
                     <div class="code-preview">
-                        <div class="code-type">${type.slice(1).toUpperCase()}</div>
+                        <div class="code-type">${file.type.slice(1).toUpperCase()}</div>
                         <pre class="code-content">${fileContent ? escapeHtml(fileContent) + '...' : '无法读取文件内容'}</pre>
                         <div class="code-overlay">
                             <button class="open-folder-btn" data-path="${file.path}">
@@ -592,15 +569,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (error) {
                 preview = `
                     <div class="code-preview">
-                        <div class="code-type">${type.slice(1).toUpperCase()}</div>
+                        <div class="code-type">${file.type.slice(1).toUpperCase()}</div>
                         <div class="code-content">无法读取文件内容</div>
                     </div>`
                 }
             }
-        } else if (['.ico', '.icns', '.svg'].includes(type)) {
+        } else if (['.ico', '.icns', '.svg'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="icon-preview">
-                    <div class="icon-type">${type.slice(1).toUpperCase()}</div>
+                    <div class="icon-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="icon-content">
                         <img src="file://${file.path}" alt="${file.name}" style="width: auto; height: 100px; object-fit: contain;">
                     </div>
@@ -611,15 +588,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </div>`
-        } else if (['.txt', '.md', '.doc', '.docx', '.pdf'].includes(type)) {
+        } else if (['.txt', '.md', '.doc', '.docx', '.pdf'].includes(file.type.toLowerCase())) {
             let previewIcon = '📄'  // 默认文档图标
-            if (type === '.pdf') {
+            if (file.type === '.pdf') {
                 previewIcon = '📕'  // PDF 特殊图标
             }
             
             preview = `
                 <div class="note-preview">
-                    <div class="note-type">${type.slice(1).toUpperCase()}</div>
+                    <div class="note-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="note-content">
                         <div class="file-icon">${previewIcon}</div>
                         <div class="file-name">${file.name}</div>
@@ -634,10 +611,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </div>`
-        } else if (['.ppt', '.pptx'].includes(type)) {
+        } else if (['.ppt', '.pptx'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="note-preview">
-                    <div class="note-type">${type.slice(1).toUpperCase()}</div>
+                    <div class="note-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="note-content">
                         <div class="file-icon">📊</div>
                         <div class="file-name">${file.name}</div>
@@ -647,10 +624,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         打开位置
                     </button>
                 </div>`
-        } else if (['.theme'].includes(type)) {
+        } else if (['.theme'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="note-preview">
-                    <div class="note-type">${type.slice(1).toUpperCase()}</div>
+                    <div class="note-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="note-content">
                         <div class="file-icon">🎨</div>
                         <div class="file-name">${file.name}</div>
@@ -660,13 +637,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                         打开位置
                     </button>
                 </div>`
-        } else if (['.aep', '.zip'].includes(type)) {
+        } else if (['.aep', '.zip'].includes(file.type.toLowerCase())) {
             // 根据文件类型选择不同的图标
-            const fileIcon = type === '.zip' ? '📦' : '🎬'  // zip用包裹图标，aep用视频图标
+            const fileIcon = file.type === '.zip' ? '📦' : '🎬'  // zip用包裹图标，aep用视频图标
             
             preview = `
                 <div class="ae-preview">
-                    <div class="ae-type">${type.slice(1).toUpperCase()}</div>
+                    <div class="ae-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="ae-content">
                         <div class="file-icon">${fileIcon}</div>
                         <div class="file-name">${file.name}</div>
@@ -677,10 +654,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 </div>`
             card.classList.add('ae-card')
-        } else if (['.fbx', '.obj', '.max', '.c4d', '.blend', '.3ds', '.dae', '.pth', '.glb'].includes(type)) {
+        } else if (['.fbx', '.obj', '.max', '.c4d', '.blend', '.3ds', '.dae', '.pth', '.glb'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="model-preview">
-                    <div class="model-type">${type.slice(1).toUpperCase()}</div>
+                    <div class="model-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="model-content">
                         <div class="file-icon">🎮</div>
                         <div class="file-name">${file.name}</div>
@@ -702,8 +679,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>`
         }
 
+        // 修改 card.innerHTML，将删除按钮添加到 preview div 中
         card.innerHTML = `
             <div class="preview">
+                <button class="delete-btn" title="删除">×</button>
                 ${preview}
             </div>
             <div class="info">
@@ -715,17 +694,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ${tagsHtml}
             </div>`
 
+        // 添加删除按钮的事件监听
+        const deleteBtn = card.querySelector('.delete-btn')
+        deleteBtn.addEventListener('click', async (e) => {
+            e.stopPropagation() // 阻止事件冒泡
+            
+            // 显示确认对话框
+            if (!await showConfirmDialog(`确定要删除 "${file.name}" 吗？`)) {
+                return
+            }
+            
+            try {
+                const success = await window.electronAPI.deleteFile(file.path)
+                if (success) {
+                    // 从数组中移除该文件
+                    allFiles = allFiles.filter(f => f.path !== file.path)
+                    // 重新显示文件列表
+                    displayFiles(allFiles)
+                } else {
+                    alert('删除文件失败')
+                }
+            } catch (error) {
+                console.error('删除文件失败:', error)
+                alert('删除文件失败')
+            }
+        })
+
         // 添加事件监听器
-            const openBtn = card.querySelector('.open-folder-btn')
-            if (openBtn) {
-                openBtn.addEventListener('click', async (e) => {
+        const openBtn = card.querySelector('.open-folder-btn')
+        if (openBtn) {
+            openBtn.addEventListener('click', async (e) => {
                 e.preventDefault()
-                    e.stopPropagation()
+                e.stopPropagation()
                 const filePath = e.currentTarget.dataset.path
-                    try {
+                try {
                     await window.electronAPI.openPath(filePath)
-                    } catch (error) {
-                        console.error('打开文件位置失败：', error)
+                } catch (error) {
+                    console.error('打开文件位置失败：', error)
                 }
             })
         }
@@ -733,7 +738,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 添加标签管理功能
         const fileCategory = getFileCategory(file.type)
         card.addEventListener('contextmenu', async (e) => {
-                            e.preventDefault()
+            e.preventDefault()
             
             try {
                 // 获取当前文件标签
@@ -742,7 +747,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // 获取该分类下的所有可用标签
                 const availableTags = allTags[fileCategory] || []
                         
-                        // 创建标签选择对话框
+                // 创建标签选择对话框
                 const tagDialog = document.createElement('div')
                 tagDialog.className = 'tag-dialog'
                 tagDialog.style.position = 'fixed'
@@ -756,18 +761,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="available-tags">
                             ${availableTags.map(tag => `
                                 <label class="tag-item">
-                                        <input type="checkbox" value="${tag}" ${currentTags.includes(tag) ? 'checked' : ''}>
+                                    <input type="checkbox" value="${tag}" ${currentTags.includes(tag) ? 'checked' : ''}>
                                     <span>${tag}</span>
-                                    </label>
-                                `).join('')}
+                                </label>
+                            `).join('')}
                         </div>
                         <div class="tag-dialog-buttons">
                             <button class="cancel-btn">取消</button>
                             <button class="save-btn">保存</button>
                         </div>
-                            </div>
-                        `
-                        
+                    </div>
+                `
+                
                 document.body.appendChild(tagDialog)
                 
                 // 添加事件处理
@@ -795,7 +800,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 tagDialog.querySelector('.cancel-btn').addEventListener('click', handleCancel)
                 
                 // 延迟添加点外部关闭事件，避免立即触发
-                        setTimeout(() => {
+                setTimeout(() => {
                     document.addEventListener('click', handleClickOutside)
                 }, 100)
                 
@@ -805,7 +810,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
 
         // 添加双击事件处理
-        if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(type)) {
+        if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(file.type.toLowerCase())) {
             card.addEventListener('dblclick', async () => {
                 try {
                     const codeDetailModal = document.getElementById('code-detail-modal')
@@ -827,7 +832,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
         }
 
-        if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(type)) {
+        if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(file.type.toLowerCase())) {
             // 获取音频相关元素
             const audioElement = card.querySelector('audio')
             const playIcon = card.querySelector('.audio-play-icon')
