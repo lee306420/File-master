@@ -1,0 +1,27 @@
+.open-file-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 4px;
+    transition: background-color 0.2s;
+}
+
+.open-file-btn:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.open-file-icon {
+    font-size: 14px;
+}
+
+.image-controls, .video-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+} 

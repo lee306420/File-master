@@ -445,6 +445,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         requestAnimationFrame(() => {
             mainContent.scrollTop = scrollPosition
         })
+
+        // 在处理其他事件监听器的地方附近添加
+        materialGrid.addEventListener('click', async (e) => {
+            const openFileBtn = e.target.closest('.open-file-btn')
+            if (openFileBtn) {
+                const filePath = openFileBtn.dataset.path
+                try {
+                    // 直接用系统默认程序打开所有文件
+                    await window.electronAPI.openFile(filePath)
+                } catch (error) {
+                    console.error('打开文件失败:', error)
+                }
+            }
+        })
     }
 
     // 修改标签筛选函数
@@ -486,7 +500,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <img src="file://${file.path}" alt="${file.name}" style="width: 100%; height: 150px; object-fit: cover;">
                     <div class="image-overlay">
                         <div class="image-controls">
-                            <span class="fullscreen-icon">⛶</span>
+                            <button class="open-file-btn" data-path="${file.path}">
+                                <i class="open-file-icon">📄</i>
+                                打开
+                            </button>
                         </div>
                         <button class="open-folder-btn" data-path="${file.path}">
                             <i class="folder-open-icon">📂</i>
@@ -500,7 +517,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <video src="file://${file.path}" style="width: 100%; height: 150px; object-fit: cover;"></video>
                     <div class="video-overlay">
                         <div class="video-controls">
-                            <span class="fullscreen-icon">⛶</span>
+                            <button class="open-file-btn" data-path="${file.path}">
+                                <i class="open-file-icon">📄</i>
+                                打开
+                            </button>
                         </div>
                         <span class="play-icon"></span>
                         <button class="open-folder-btn" data-path="${file.path}">
@@ -545,6 +565,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                         <div class="code-overlay">
+                            <button class="open-file-btn" data-path="${file.path}">
+                                <i class="open-file-icon">📄</i>
+                                打开
+                            </button>
                             <button class="open-folder-btn" data-path="${file.path}">
                                 <i class="folder-open-icon">📂</i>
                                 打开位置
@@ -552,34 +576,55 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     </div>`
             } else {
-                // 保持现有的单文件预览逻辑
-            try {
-                const fileContent = await window.electronAPI.readFileContent(file.path)
-                preview = `
-                    <div class="code-preview">
-                        <div class="code-type">${file.type.slice(1).toUpperCase()}</div>
-                        <pre class="code-content">${fileContent ? escapeHtml(fileContent) + '...' : '无法读取文件内容'}</pre>
-                        <div class="code-overlay">
-                            <button class="open-folder-btn" data-path="${file.path}">
-                                <i class="folder-open-icon">📂</i>
-                                打开位置
-                            </button>
-                        </div>
-                    </div>`
-            } catch (error) {
-                preview = `
-                    <div class="code-preview">
-                        <div class="code-type">${file.type.slice(1).toUpperCase()}</div>
-                        <div class="code-content">无法读取文件内容</div>
-                    </div>`
+                // 单文件代码预览
+                try {
+                    const fileContent = await window.electronAPI.readFileContent(file.path)
+                    preview = `
+                        <div class="code-preview">
+                            <div class="code-type">${file.type.slice(1).toUpperCase()}</div>
+                            <pre class="code-content">${fileContent ? escapeHtml(fileContent) + '...' : '无法读取文件内容'}</pre>
+                            <div class="code-overlay">
+                                <button class="open-file-btn" data-path="${file.path}">
+                                    <i class="open-file-icon">📄</i>
+                                    打开
+                                </button>
+                                <button class="open-folder-btn" data-path="${file.path}">
+                                    <i class="folder-open-icon">📂</i>
+                                    打开位置
+                                </button>
+                            </div>
+                        </div>`
+                } catch (error) {
+                    preview = `
+                        <div class="code-preview">
+                            <div class="code-type">${file.type.slice(1).toUpperCase()}</div>
+                            <div class="code-content">无法读取文件内容</div>
+                            <div class="code-overlay">
+                                <button class="open-file-btn" data-path="${file.path}">
+                                    <i class="open-file-icon">📄</i>
+                                    打开
+                                </button>
+                                <button class="open-folder-btn" data-path="${file.path}">
+                                    <i class="folder-open-icon">📂</i>
+                                    打开位置
+                                </button>
+                            </div>
+                        </div>`
                 }
             }
         } else if (['.ico', '.icns', '.svg'].includes(file.type.toLowerCase())) {
+            let imgSrc = `file://${file.path}`
+            
+            // 如果是 icns 文件且有预览图路径，使用预览图
+            if (file.type === '.icns' && file.previewPath) {
+                imgSrc = `file://${file.previewPath}`
+            }
+            
             preview = `
                 <div class="icon-preview">
                     <div class="icon-type">${file.type.slice(1).toUpperCase()}</div>
                     <div class="icon-content">
-                        <img src="file://${file.path}" alt="${file.name}" style="width: auto; height: 100px; object-fit: contain;">
+                        <img src="${imgSrc}" alt="${file.name}" style="width: auto; height: 100px; object-fit: contain;">
                     </div>
                     <div class="icon-overlay">
                         <button class="open-folder-btn" data-path="${file.path}">
@@ -603,7 +648,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                     <div class="note-overlay">
                         <div class="note-controls">
-                            <span class="fullscreen-icon">⛶</span>
+                            <button class="open-file-btn" data-path="${file.path}">
+                                <i class="open-file-icon">📄</i>
+                                打开
+                            </button>
                         </div>
                         <button class="open-folder-btn" data-path="${file.path}">
                             <i class="folder-open-icon">📂</i>
@@ -619,10 +667,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="file-icon">📊</div>
                         <div class="file-name">${file.name}</div>
                     </div>
-                    <button class="open-folder-btn" data-path="${file.path}">
-                        <i class="folder-open-icon">📂</i>
-                        打开位置
-                    </button>
+                    <div class="note-overlay">
+                        <div class="note-controls">
+                            <button class="open-file-btn" data-path="${file.path}">
+                                <i class="open-file-icon">📄</i>
+                                打开
+                            </button>
+                        </div>
+                        <button class="open-folder-btn" data-path="${file.path}">
+                            <i class="folder-open-icon">📂</i>
+                            打开位置
+                        </button>
+                    </div>
                 </div>`
         } else if (['.theme'].includes(file.type.toLowerCase())) {
             preview = `
@@ -648,10 +704,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="file-icon">${fileIcon}</div>
                         <div class="file-name">${file.name}</div>
                     </div>
-                    <button class="open-folder-btn" data-path="${file.path}">
-                        <i class="folder-open-icon">📂</i>
-                        打开位置
-                    </button>
+                    <div class="ae-overlay">
+                        <button class="open-file-btn" data-path="${file.path}">
+                            <i class="open-file-icon">📄</i>
+                            打开
+                        </button>
+                        <button class="open-folder-btn" data-path="${file.path}">
+                            <i class="folder-open-icon">📂</i>
+                            打开位置
+                        </button>
+                    </div>
                 </div>`
             card.classList.add('ae-card')
         } else if (['.fbx', '.obj', '.max', '.c4d', '.blend', '.3ds', '.dae', '.pth', '.glb'].includes(file.type.toLowerCase())) {
@@ -808,84 +870,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('标签管理失败：', error)
             }
         })
-
-        // 添加双击事件处理
-        if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(file.type.toLowerCase())) {
-            card.addEventListener('dblclick', async () => {
-                try {
-                    const codeDetailModal = document.getElementById('code-detail-modal')
-                    const codeFilename = document.getElementById('code-filename')
-                    const codeContent = document.getElementById('code-content')
-                    
-                    // 设置文件名
-                    codeFilename.textContent = file.name
-                    
-                    // 读取完整文件内容
-                    const fullContent = await window.electronAPI.readFullFileContent(file.path)
-                    codeContent.textContent = fullContent || '无法读取文件内容'
-                    
-                    // 显示模态框
-                    codeDetailModal.style.display = 'block'
-                } catch (error) {
-                    console.error('读取文件内容失败：', error)
-                }
-            })
-        }
-
-        if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(file.type.toLowerCase())) {
-            // 获取音频相关元素
-            const audioElement = card.querySelector('audio')
-            const playIcon = card.querySelector('.audio-play-icon')
-            const progressBar = card.querySelector('.progress-bar')
-            const audioProgress = card.querySelector('.audio-progress')
-            const audioTime = card.querySelector('.audio-time')
-            
-            // 添加播放/暂停功能
-            playIcon.addEventListener('click', () => {
-                if (audioElement.paused) {
-                    audioElement.play()
-                    playIcon.textContent = '⏸' // 切换为暂停图标
-                } else {
-                    audioElement.pause()
-                    playIcon.textContent = '▶' // 切换为播放图标
-                }
-            })
-            
-            // 更新进度条和时间显示
-            audioElement.addEventListener('timeupdate', () => {
-                const progress = (audioElement.currentTime / audioElement.duration) * 100
-                progressBar.style.width = `${progress}%`
-                
-                // 更新时间显示
-                const currentMinutes = Math.floor(audioElement.currentTime / 60)
-                const currentSeconds = Math.floor(audioElement.currentTime % 60)
-                const totalMinutes = Math.floor(audioElement.duration / 60) || 0
-                const totalSeconds = Math.floor(audioElement.duration % 60) || 0
-                
-                audioTime.textContent = `${String(currentMinutes).padStart(2, '0')}:${String(currentSeconds).padStart(2, '0')} / ${String(totalMinutes).padStart(2, '0')}:${String(totalSeconds).padStart(2, '0')}`
-            })
-            
-            // 点击进度条跳转
-            audioProgress.addEventListener('click', (e) => {
-                const rect = audioProgress.getBoundingClientRect()
-                const clickPosition = (e.clientX - rect.left) / rect.width
-                audioElement.currentTime = clickPosition * audioElement.duration
-            })
-            
-            // 音频加载完成后更新总时长
-            audioElement.addEventListener('loadedmetadata', () => {
-                const totalMinutes = Math.floor(audioElement.duration / 60)
-                const totalSeconds = Math.floor(audioElement.duration % 60)
-                audioTime.textContent = `00:00 / ${String(totalMinutes).padStart(2, '0')}:${String(totalSeconds).padStart(2, '0')}`
-            })
-            
-            // 播放结束时重置
-            audioElement.addEventListener('ended', () => {
-                playIcon.textContent = '▶'
-                progressBar.style.width = '0%'
-                audioElement.currentTime = 0
-            })
-        }
 
         return card
     }

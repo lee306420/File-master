@@ -60,7 +60,21 @@ app.whenReady().then(() => {
                     const filePath = path.join(folderPath, file)
                     const stats = fs.statSync(filePath)
                     
-                    if (folder === 'code' && stats.isDirectory()) {
+                    // 添加对 .icns 文件的特殊处理
+                    if (path.extname(file).toLowerCase() === '.icns') {
+                        // 尝试查找同名的 png 文件
+                        const pngName = file.replace('.icns', '.png')
+                        const pngPath = path.join(folderPath, pngName)
+                        
+                        return {
+                            path: filePath,
+                            name: file,
+                            size: stats.size,
+                            type: '.icns',
+                            lastModified: stats.mtime,
+                            previewPath: fs.existsSync(pngPath) ? pngPath : null // 如果存在png则使用，否则为null
+                        }
+                    } else if (folder === 'code' && stats.isDirectory()) {
                         const isProject = await checkIfCodeProject(filePath)
                         return {
                             path: filePath,
@@ -865,4 +879,18 @@ ipcMain.handle('get-config-path', async () => {
     console.error('获取配置路径失败:', error)
   }
   return null
+})
+
+// 在其他 ipcMain.handle 处理器附近添加
+ipcMain.handle('open-file', async (event, filePath) => {
+    try {
+        if (fs.existsSync(filePath)) {
+            // 使用系统默认程序打开文件
+            shell.openPath(filePath)
+            return true
+        }
+    } catch (error) {
+        console.error('打开文件失败：', error)
+    }
+    return false
 })

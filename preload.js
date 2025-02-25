@@ -19,4 +19,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openUserData: () => ipcRenderer.invoke('open-user-data'),
   getProjectStats: (projectPath) => ipcRenderer.invoke('get-project-stats', projectPath),
   getConfigPath: () => ipcRenderer.invoke('get-config-path'),
+  openFile: (filePath) => ipcRenderer.invoke('open-file', filePath),
 }) 

@@ -776,7 +776,7 @@ video:fullscreen {
     font-family: 'Consolas', 'Monaco', monospace;
 }
 
-/* 添加覆盖层样式 */
+/* 修改代码预览覆盖层样式 */
 .code-overlay {
     position: absolute;
     top: 0;
@@ -785,37 +785,46 @@ video:fullscreen {
     bottom: 0;
     background-color: rgba(40, 44, 52, 0.8);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.material-card:hover .code-overlay {
+.code-preview:hover .code-overlay {
     opacity: 1;
 }
 
-/* 修改代码卡片中的打开按钮样式 */
+/* 代码卡片按钮样式 */
+.code-preview .open-file-btn,
 .code-preview .open-folder-btn {
-    position: static;
-    transform: none;
     background-color: rgba(171, 178, 191, 0.2);
     border: 1px solid rgba(171, 178, 191, 0.3);
-    color: #fff;
+    border-radius: 4px;
     padding: 8px 16px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
     font-size: 14px;
-    opacity: 1;
 }
 
+.code-preview .open-file-btn:hover,
 .code-preview .open-folder-btn:hover {
-    background-color: #abb2bf;
-    color: #282c34;
-    transform: scale(1.05);
+    background-color: rgba(171, 178, 191, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(171, 178, 191, 0.2);
 }
 
+/* 调整图标大小 */
+.code-preview .open-file-icon,
 .code-preview .folder-open-icon {
     font-size: 16px;
-} 
+}
 
 /* 文件夹预览样式 */
 .folder-preview {
@@ -925,28 +934,6 @@ video:fullscreen {
 
 .folder-open-icon {
     font-size: 14px;
-} 
-
-/* 代码卡片中的打开按钮样式 */
-.code-preview .open-folder-btn {
-    background-color: rgba(171, 178, 191, 0.1);
-    border: 1px solid rgba(171, 178, 191, 0.2);
-    color: #abb2bf;
-}
-
-.code-preview .open-folder-btn:hover {
-    background-color: #abb2bf;
-    color: #282c34;
-}
-
-/* 确保按钮在代码预览中正确显示 */
-.code-preview {
-    position: relative;
-    padding-bottom: 40px; /* 为按钮留出空间 */
-}
-
-.code-preview .code-content {
-    height: calc(100% - 40px); /* 调整内容区域高度 */
 } 
 
 /* 照片详情对话框样式 */
@@ -1579,61 +1566,85 @@ video:fullscreen {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;  /* 水平居中 */
+    align-items: center;
+    justify-content: center; /* 确保内容垂直居中 */
 }
 
-/* 笔记内容区域样式 */
-.note-content {
+/* 调整按钮容器样式 */
+.note-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;  /* 给顶部类型标签留出空间 */
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* 笔记卡片的打开位置按钮样式 */
+/* 显示覆盖层 */
+.note-preview:hover .note-overlay {
+    opacity: 1;
+}
+
+/* 调整按钮样式 */
+.note-preview .open-file-btn,
 .note-preview .open-folder-btn {
-    position: absolute;  /* 使用绝对定位 */
-    top: 50%;          /* 垂直居中 */
-    left: 50%;         /* 水平居中 */
-    transform: translate(-50%, -50%);  /* 完全居中 */
     background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: #333;
-    padding: 6px 12px;
+    border: none;
     border-radius: 4px;
+    padding: 8px 16px;
+    color: #333;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     transition: all 0.3s ease;
-    z-index: 2;  /* 确保按钮在其他元素上 */
-}
-
-/* 文件图标和文件名样式 */
-.note-preview .file-icon {
-    font-size: 48px;
-    text-align: center;
-    margin-bottom: 8px;
-    opacity: 0.7;  /* 降低图标透明度，让按钮更突出 */
-}
-
-.note-preview .file-name {
-    text-align: center;
     font-size: 14px;
-    color: #666;
-    word-break: break-all;
-    padding: 0 10px;
-    opacity: 0.7;  /* 降低文件名透明度，让按钮更突出 */
 }
 
-/* 按钮悬停效果 */
+.note-preview .open-file-btn:hover,
 .note-preview .open-folder-btn:hover {
     background-color: #fff;
-    border-color: rgba(0, 0, 0, 0.2);
-    transform: translate(-50%, -50%) scale(1.05);  /* 保持居中的同时添加缩放效果 */
+    transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-} 
+}
+
+/* 调整图标大小 */
+.note-preview .open-file-icon,
+.note-preview .folder-open-icon {
+    font-size: 16px;
+}
+
+/* 调整删除按钮位置 */
+.delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #666;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #ff4d4f;
+    color: white;
+}
 
 /* 修改工具栏样式 */
 .toolbar {
@@ -1713,54 +1724,56 @@ video:fullscreen {
     color: #fff;
 }
 
-.ae-type {
+/* 添加 AE 覆盖层样式 */
+.ae-overlay {
     position: absolute;
-    top: 8px;
-    left: 8px;
-    font-size: 12px;
-    color: #9999ff;  /* AE特色紫色 */
-    font-weight: bold;
-}
-
-.ae-content {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.ae-content .file-icon {
-    font-size: 48px;
-    margin-bottom: 8px;
+/* 显示覆盖层 */
+.ae-preview:hover .ae-overlay {
+    opacity: 1;
 }
 
-.ae-content .file-name {
-    text-align: center;
-    font-size: 14px;
+/* AE 卡片按钮样式 */
+.ae-preview .open-file-btn,
+.ae-preview .open-folder-btn {
+    background-color: rgba(153, 153, 255, 0.2);  /* AE特色紫色 */
+    border: 1px solid rgba(153, 153, 255, 0.3);
+    border-radius: 4px;
+    padding: 8px 16px;
     color: #fff;
-    word-break: break-all;
-    padding: 0 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    font-size: 14px;
 }
 
-/* 修改 AE 卡片样式 */
-.material-card.ae-card {
-    border: 2px solid #9999ff;
+.ae-preview .open-file-btn:hover,
+.ae-preview .open-folder-btn:hover {
+    background-color: rgba(153, 153, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(153, 153, 255, 0.2);
 }
 
-.material-card.ae-card:hover {
-    border: 2px solid #b3b3ff;
+/* 调整图标大小 */
+.ae-preview .open-file-icon,
+.ae-preview .folder-open-icon {
+    font-size: 16px;
 }
-
-.material-card.ae-card .info {
-    border: 2px solid #9999ff;
-    border-top: none;
-}
-
-.material-card.ae-card:hover .info {
-    border: 2px solid #b3b3ff;
-    border-top: none;
-} 
 
 /* 添加模型预览样式 */
 .model-preview {
