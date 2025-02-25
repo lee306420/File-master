@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
-    // 修改 displayFiles 函数
+    // 修改 displayFiles 函数,移除重复添加的事件监听器
     async function displayFiles(files) {
         // 保存当前滚动位置
         const mainContent = document.querySelector('.main-content')
@@ -444,20 +444,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 恢复滚动位置
         requestAnimationFrame(() => {
             mainContent.scrollTop = scrollPosition
-        })
-
-        // 在处理其他事件监听器的地方附近添加
-        materialGrid.addEventListener('click', async (e) => {
-            const openFileBtn = e.target.closest('.open-file-btn')
-            if (openFileBtn) {
-                const filePath = openFileBtn.dataset.path
-                try {
-                    // 直接用系统默认程序打开所有文件
-                    await window.electronAPI.openFile(filePath)
-                } catch (error) {
-                    console.error('打开文件失败:', error)
-                }
-            }
         })
     }
 
@@ -1138,15 +1124,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 300)
     })
 
+    // 在 DOMContentLoaded 事件处理函数中添加一次性的事件监听器
+    // 添加在初始化代码附近,例如 init() 调用之前
+
+    // 为打开文件按钮添加一次性的事件监听器
+    materialGrid.addEventListener('click', async (e) => {
+        const openFileBtn = e.target.closest('.open-file-btn')
+        if (openFileBtn) {
+            const filePath = openFileBtn.dataset.path
+            try {
+                // 直接用系统默认程序打开所有文件
+                await window.electronAPI.openFile(filePath)
+            } catch (error) {
+                console.error('打开文件失败:', error)
+            }
+        }
+    })
+
     // 初始化
     async function init() {
         await initStoragePath()
         await initTags()
-        currentCategory = 'all' // 确保初始状态为全
+        currentCategory = 'all' // 确保初始状态为全部
         clearAllCategoryActive() // 清除所有类的活动状态
     }
 
-    // 启动用
+    // 启动初始化
     init()
 
     // 添加时间格式化函数
