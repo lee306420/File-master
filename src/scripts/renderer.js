@@ -518,22 +518,71 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (['.mp3', '.wav', '.m4a', '.ogg', '.flac'].includes(file.type.toLowerCase())) {
             preview = `
                 <div class="audio-preview">
-                    <audio src="file://${file.path}"></audio>
                     <div class="audio-controls">
-                        <i class="audio-play-icon">▶</i>
+                        <i class="audio-play-icon">▶️</i>
                         <div class="audio-info">
-                            <div class="audio-format">${file.type.slice(1).toUpperCase()}</div>
+                            <div class="audio-format">${file.type.substring(1).toUpperCase()}</div>
                             <div class="audio-time">00:00</div>
                         </div>
+                        <button class="open-folder-btn" data-path="${file.path}">
+                            <i class="folder-open-icon">📂</i>
+                            打开位置
+                        </button>
                     </div>
                     <div class="audio-progress">
-                        <div class="progress-bar"></div>
+                        <div class="progress-bar" style="width: 0%"></div>
                     </div>
-                    <button class="open-folder-btn" data-path="${file.path}">
-                        <i class="folder-open-icon">📂</i>
-                        打开位置
-                    </button>
+                    <audio style="display: none;">
+                        <source src="file://${file.path}" type="audio/${file.type.substring(1)}">
+                    </audio>
                 </div>`
+
+            // 在卡片添加到 DOM 后再设置音频相关的事件监听
+            setTimeout(() => {
+                const audioPreview = card.querySelector('.audio-preview')
+                const audio = audioPreview.querySelector('audio')
+                const playIcon = audioPreview.querySelector('.audio-play-icon')
+                const progressBar = audioPreview.querySelector('.progress-bar')
+                const timeDisplay = audioPreview.querySelector('.audio-time')
+                const progressContainer = audioPreview.querySelector('.audio-progress')
+
+                // 播放/暂停切换
+                playIcon.addEventListener('click', () => {
+                    if (audio.paused) {
+                        audio.play()
+                        playIcon.textContent = '⏸️'
+                    } else {
+                        audio.pause()
+                        playIcon.textContent = '▶️'
+                    }
+                })
+
+                // 更新进度条和时间显示
+                audio.addEventListener('timeupdate', () => {
+                    const progress = (audio.currentTime / audio.duration) * 100
+                    progressBar.style.width = `${progress}%`
+                    timeDisplay.textContent = formatTime(audio.currentTime)
+                })
+
+                // 音频加载完成后显示总时长
+                audio.addEventListener('loadedmetadata', () => {
+                    timeDisplay.textContent = formatTime(audio.duration)
+                })
+
+                // 点击进度条跳转
+                progressContainer.addEventListener('click', (e) => {
+                    const rect = progressContainer.getBoundingClientRect()
+                    const pos = (e.clientX - rect.left) / rect.width
+                    audio.currentTime = pos * audio.duration
+                })
+
+                // 音频播放结束时重置图标
+                audio.addEventListener('ended', () => {
+                    playIcon.textContent = '▶️'
+                    progressBar.style.width = '0%'
+                    timeDisplay.textContent = formatTime(audio.duration)
+                })
+            }, 0)
         } else if (['.js', '.py', '.java', '.cpp', '.html', '.css'].includes(file.type.toLowerCase()) || file.type === '.project') {
             let previewContent = ''
             

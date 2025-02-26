@@ -1042,23 +1042,54 @@ video:fullscreen {
 .audio-controls {
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 15px;
     margin-bottom: 15px;
 }
 
-.audio-play-icon {
-    font-size: 32px;
-    color: #1890ff;
+.audio-controls .open-folder-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    transition: all 0.2s ease;
 }
 
-.audio-play-icon:hover {
-    transform: scale(1.1);
+.audio-controls .open-folder-btn:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.audio-controls .open-folder-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.audio-controls .open-folder-btn:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
 }
 
 .audio-info {
+    flex: 1;
     text-align: center;
+    margin: 0 15px;
 }
 
 .audio-format {
