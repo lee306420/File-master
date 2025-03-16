@@ -1110,16 +1110,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 设置存储路径
     storagePathBtn.addEventListener('click', async () => {
         try {
+            console.log('正在设置存储路径...')
             const path = await window.electronAPI.selectStoragePath()
+            console.log('获取到的存储路径:', path)
+            
             if (path) {
                 currentPathDiv.textContent = `当前位置：${path}`
                 importBtn.disabled = false
+                console.log('正在重新加载文件...')
                 // 重新加载文件
                 allFiles = await window.electronAPI.loadExistingFiles()
                 displayFiles(allFiles)
+                console.log('文件重新加载完成')
             }
         } catch (error) {
             console.error('设置存储路径出错：', error)
+            alert(`设置存储路径失败: ${error.message}`)
         }
     })
 

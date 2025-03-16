@@ -128,21 +128,42 @@ app.on('window-all-closed', function () {
 
 // 添加选择存储路径的处理器
 ipcMain.handle('select-storage-path', async () => {
-  const result = await dialog.showOpenDialog({
-    properties: ['openDirectory'],
-    title: '选择素材存储位置'
-  })
+  try {
+    console.log('开始选择存储路径')
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory'],
+      title: '选择素材存储位置'
+    })
 
-  if (!result.canceled) {
-    const storagePath = result.filePaths[0]
-    const configPath = path.join(app.getPath('userData'), 'config.json')
-    const config = { storagePath }
-    
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 2))
-    setupFSWatcher(storagePath)
-    return storagePath
+    console.log('对话框结果:', result)
+
+    if (!result.canceled) {
+      const storagePath = result.filePaths[0]
+      console.log('选择的存储路径:', storagePath)
+      
+      const configPath = path.join(app.getPath('userData'), 'config.json')
+      console.log('配置文件路径:', configPath)
+      
+      // 确保配置目录存在
+      const configDir = path.dirname(configPath)
+      if (!fs.existsSync(configDir)) {
+        await fs.promises.mkdir(configDir, { recursive: true })
+      }
+
+      const config = { storagePath }
+      
+      // 使用异步写入
+      await fs.promises.writeFile(configPath, JSON.stringify(config, null, 2))
+      console.log('配置文件写入成功')
+      
+      setupFSWatcher(storagePath)
+      return storagePath
+    }
+    return null
+  } catch (error) {
+    console.error('设置存储路径时发生错误:', error)
+    throw error // 将错误传递给渲染进程
   }
-  return null
 })
 
 // 获取当前存储
