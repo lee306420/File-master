@@ -455,7 +455,7 @@ video:fullscreen {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     margin-top: 16px;
-    max-height: 400px;
+    max-height: calc(3 * (8px + 40px)); /* 3行高度: 3 * (gap + 标签平均高度) */
     overflow-y: auto;
     padding-right: 8px;
 }
@@ -551,7 +551,7 @@ video:fullscreen {
     color: #666;
 }
 
-/* 美化滚动条 */
+/* 美化.tags-list滚动条 */
 .tags-list::-webkit-scrollbar {
     width: 6px;
 }
@@ -809,8 +809,11 @@ video:fullscreen {
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.3s ease;
+    /* 明确指定过渡属性，避免意外的位置偏移 */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     font-size: 14px;
+    /* 确保按钮没有被移位 */
+    transform: translateX(0) translateY(0);
 }
 
 .code-preview .open-file-btn:hover,
@@ -1635,8 +1638,11 @@ video:fullscreen {
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.3s ease;
+    /* 明确指定过渡属性，避免意外的位置偏移 */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     font-size: 14px;
+    /* 确保按钮没有被移位 */
+    transform: translateX(0) translateY(0);
 }
 
 .note-preview .open-file-btn:hover,
@@ -1789,8 +1795,11 @@ video:fullscreen {
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.3s ease;
+    /* 明确指定过渡属性，避免意外的位置偏移 */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     font-size: 14px;
+    /* 确保按钮没有被移位 */
+    transform: translateX(0) translateY(0);
 }
 
 .ae-preview .open-file-btn:hover,
@@ -2036,7 +2045,7 @@ video:fullscreen {
 }
 
 .available-tags {
-    max-height: 200px;
+    max-height: calc(2 * (8px + 35px)); /* 2行高度: 2 * (gap + 标签项高度) */
     overflow-y: auto;
     margin-bottom: 12px;
     display: grid;

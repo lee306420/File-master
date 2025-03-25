@@ -723,10 +723,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="file-icon">🎨</div>
                         <div class="file-name">${file.name}</div>
                     </div>
-                    <button class="open-folder-btn" data-path="${file.path}">
-                        <i class="folder-open-icon">📂</i>
-                        打开位置
-                    </button>
+                    <div class="note-overlay">
+                        <button class="open-folder-btn" data-path="${file.path}">
+                            <i class="folder-open-icon">📂</i>
+                            打开位置
+                        </button>
+                    </div>
                 </div>`
         } else if (['.aep', '.zip'].includes(file.type.toLowerCase())) {
             // 根据文件类型选择不同的图标
