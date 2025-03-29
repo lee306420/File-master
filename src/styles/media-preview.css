@@ -1,0 +1,626 @@
+/* 媒体预览样式 */
+
+/* 通用 */
+.material-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 视频预览 */
+.video-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #000;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.video-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding-bottom: 10px;
+}
+
+.material-card:hover .video-overlay {
+    opacity: 1;
+}
+
+.video-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.video-preview .open-folder-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.video-preview .open-folder-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* 全屏时的视频样式 */
+video:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+    background: black;
+}
+
+/* 图片预览 */
+.image-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding-bottom: 10px;
+}
+
+.material-card:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.image-preview .open-folder-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.image-preview .open-folder-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.image-preview .fullscreen-icon {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    color: white;
+    font-size: 24px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.image-preview .fullscreen-icon:hover {
+    transform: scale(1.2);
+}
+
+/* 音频预览 */
+.audio-preview {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ec 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+.audio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 15px;
+    margin-bottom: 15px;
+}
+
+.audio-info {
+    flex: 1;
+    text-align: center;
+    margin: 0 15px;
+}
+
+.audio-format {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.audio-time {
+    font-size: 12px;
+    color: #999;
+}
+
+.audio-progress {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.audio-progress::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 10px;
+    height: 4px;
+    background-color: #1890ff;
+    border-radius: 2px;
+    transition: height 0.2s ease;
+}
+
+.audio-progress:hover .progress-bar {
+    height: 6px;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #1890ff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.audio-progress:hover .progress-bar::after {
+    opacity: 1;
+}
+
+.audio-controls .open-folder-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.audio-controls .open-folder-btn:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.audio-preview .open-folder-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(24, 144, 255, 0.1);
+    border: 1px solid rgba(24, 144, 255, 0.2);
+    color: #1890ff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.audio-preview .open-folder-btn:hover {
+    background-color: #1890ff;
+    color: white;
+}
+
+/* 代码预览 */
+.code-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #282c34;
+    color: #abb2bf;
+    overflow: hidden;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.code-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(40, 44, 52, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.code-preview:hover .code-overlay {
+    opacity: 1;
+}
+
+.material-card.code-card:hover .code-overlay {
+    opacity: 1;
+}
+
+.project-preview .code-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.code-preview .open-file-btn,
+.code-preview .open-folder-btn {
+    background-color: rgba(171, 178, 191, 0.2);
+    border: 1px solid rgba(171, 178, 191, 0.3);
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 14px;
+    transform: translateX(0) translateY(0);
+}
+
+.code-preview .open-file-btn:hover,
+.code-preview .open-folder-btn:hover {
+    background-color: rgba(171, 178, 191, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(171, 178, 191, 0.2);
+}
+
+.code-preview .open-file-icon,
+.code-preview .folder-open-icon {
+    font-size: 16px;
+}
+
+/* 笔记预览 */
+.note-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background-color: #f8f9fa;
+    padding: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.note-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.note-preview:hover .note-overlay {
+    opacity: 1;
+}
+
+.note-preview .open-file-btn,
+.note-preview .open-folder-btn {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 14px;
+    transform: translateX(0) translateY(0);
+}
+
+.note-preview .open-file-btn:hover,
+.note-preview .open-folder-btn:hover {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.note-preview .open-file-icon,
+.note-preview .folder-open-icon {
+    font-size: 16px;
+}
+
+.video-preview .open-file-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.video-preview .open-file-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.video-preview .open-file-icon {
+    font-size: 16px;
+    margin-right: 2px;
+}
+
+/* 项目预览 */
+.project-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
+    overflow: hidden;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+}
+
+.project-icon {
+    font-size: 22px;
+    color: #3498db;
+}
+
+.project-title {
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-info {
+    flex: 1;
+    overflow: auto;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.project-details {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-preview:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.project-overlay .open-file-btn,
+.project-overlay .open-folder-btn {
+    background-color: rgba(52, 152, 219, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.project-overlay .open-file-btn:hover,
+.project-overlay .open-folder-btn:hover {
+    background-color: #3498db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 项目统计信息样式 */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding: 3px 5px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #95a5a6;
+}
+
+.stat-value {
+    color: #ecf0f1;
+}
+
+.stat-language {
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.stat-error {
+    color: #e74c3c;
+    text-align: center;
+    font-style: italic;
+    padding: 10px;
+}
+
+/* 图标预览与笔记混合样式 */
+.icon-preview.note-preview {
+    background-color: #f8f9fa;
+}
+
+.icon-preview .icon-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+    padding: 5px;
+}
+
+.icon-preview .icon-content img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* 模型预览与笔记混合样式 */
+.model-preview.note-preview {
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+    color: #f0f0f0;
+}
+
+.model-preview .file-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #66bb6a;
+}
+
+.model-preview .file-name {
+    color: #f0f0f0;
+    font-weight: bold;
+}
+
+/* 文件夹预览与笔记混合样式 */
+.folder-preview.note-preview {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e1e8f0 100%);
+    color: #333;
+}
+
+.folder-preview .folder-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+    color: #ffa000;
+}
+
+.folder-preview .file-name {
+    color: #333;
+    font-weight: bold;
+} 

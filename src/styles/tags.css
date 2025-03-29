@@ -1,0 +1,297 @@
+/* 标签相关样式 */
+
+/* 标签筛选 */
+.tags-filter-container .tag {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tags-filter-container .tag:hover {
+    background-color: #e6f7ff;
+}
+
+.tags-filter-container .tag.active {
+    background-color: #1890ff;
+    color: white;
+}
+
+/* 基础标签样式 */
+.tag {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background-color: #e6f7ff;
+}
+
+.tag.active {
+    background-color: #1890ff;
+    color: white;
+}
+
+.tag .remove {
+    margin-left: 5px;
+    color: #999;
+}
+
+.tag .remove:hover {
+    color: #ff4d4f;
+}
+
+/* 标签管理 */
+.tags-section {
+    margin-top: 20px;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+}
+
+.tags-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* 移除标签按钮 */
+.tag .remove-tag {
+    margin-left: 4px;
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 14px;
+    text-align: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.tag .remove-tag:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+/* 标签管理列表 */
+.tags-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+    max-height: calc(3 * (8px + 40px));
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.tag-list-item {
+    margin-bottom: 0;
+    background: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tag-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+.tag-name {
+    flex: 1;
+    margin-right: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.tag-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tag-actions button {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #666;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.edit-tag-btn:hover {
+    background-color: #e6f7ff;
+    color: #1890ff;
+}
+
+.delete-tag-btn:hover {
+    background-color: #fff1f0;
+    color: #ff4d4f;
+}
+
+/* 标签编辑表单 */
+.tag-edit-form {
+    display: none;
+    padding: 8px 12px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+}
+
+.edit-tag-input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.edit-actions button {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.save-edit-btn {
+    background-color: #1890ff;
+    color: white;
+}
+
+.cancel-edit-btn {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* 美化滚动条 */
+.tags-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tags-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.tags-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.tags-list::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* 添加标签 */
+.add-tag-section {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#new-tag-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#add-tag-btn {
+    padding: 8px 16px;
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+#add-tag-btn:hover {
+    opacity: 0.8;
+}
+
+/* 卡片中的标签 */
+.material-card .tags {
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-top: 2px solid #000000;
+    margin-top: 8px;
+}
+
+.material-card .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    background-color: #f5f5f5;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    color: #000000;
+    transition: all 0.3s ease;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.material-card .tag:hover {
+    background-color: #e8e8e8;
+    border-color: #666666;
+    color: #333333;
+    transform: translateY(-1px);
+}
+
+/* 添加标签按钮 */
+.material-card .add-tags-btn {
+    padding: 2px 8px;
+    background-color: transparent;
+    border: 1px dashed #b7eb8f;
+    border-radius: 12px;
+    font-size: 11px;
+    color: #52c41a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.material-card .add-tags-btn:hover {
+    border-color: #52c41a;
+    color: #389e0d;
+    background-color: #f6ffed;
+} 

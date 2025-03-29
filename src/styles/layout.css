@@ -1,0 +1,128 @@
+/* 布局相关样式 */
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.material-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+.search-tags-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 300px;
+}
+
+.tags-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.settings-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.settings-buttons button {
+    flex: 1;
+}
+
+/* 分类按钮样式 */
+.category-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background-color: #f5f7fa;
+    color: #666;
+    font-size: 14px;
+    text-align: left;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-btn:hover {
+    background-color: #e6f7ff;
+    color: #1890ff;
+    transform: translateX(4px);
+}
+
+.category-btn.active {
+    background-color: #1890ff;
+    color: white;
+    transform: translateX(4px);
+}
+
+.category-btn .icon {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.category-btn .text {
+    flex: 1;
+    font-weight: 500;
+}
+
+.category-btn .count {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.category-btn:hover .count {
+    background-color: rgba(24, 144, 255, 0.2);
+}
+
+.category-btn.active .count {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 添加动画效果 */
+.category-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    transition: transform 0.5s;
+}
+
+.category-btn:active::after {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+} 
