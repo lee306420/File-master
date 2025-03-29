@@ -213,88 +213,164 @@ async function createMaterialCard(file) {
 async function displayFiles(files, materialGrid, countElements, currentCategory, selectedTags, searchInput) {
     // 保存当前滚动位置
     const mainContent = document.querySelector('.main-content');
-    const scrollPosition = mainContent.scrollTop;
+    const scrollPosition = mainContent ? mainContent.scrollTop : 0;
+    
+    // 添加状态类，可以用于CSS样式指示加载中
+    document.body.classList.add('loading-files');
 
     console.log(`--------------------显示文件开始--------------------`);
-    console.log(`当前分类: ${currentCategory}, 总文件数: ${files.length}`);
+    console.log(`当前分类: ${currentCategory}, 总文件数: ${files ? files.length : 0}`);
 
-    // 清空当前显示
-    clearMaterialGrid(materialGrid);
-    
-    // 更新所有分类的计数
-    updateCategoryCounts(files, countElements);
-    
-    // 创建文件副本以避免修改原数组
-    let filteredFiles = [...files];
-    
-    if (currentCategory !== 'all') {
-        console.log(`应用分类筛选: ${currentCategory}`);
-        console.log(`筛选前示例文件: 
-            ${filteredFiles.slice(0, 3).map(f => 
-                `${f.name} (${f.type} => ${getFileCategory(f.type)})`
-            ).join('\n            ')}`);
-        
-        // 应用分类筛选
-        filteredFiles = filterFilesByCategory(filteredFiles, currentCategory);
-        
-        console.log(`分类筛选后文件数: ${filteredFiles.length}`);
-        if (filteredFiles.length > 0) {
-            console.log(`筛选后示例文件: 
-                ${filteredFiles.slice(0, 3).map(f => 
-                    `${f.name} (${f.type} => ${getFileCategory(f.type)})`
-                ).join('\n                ')}`);
+    try {
+        // 参数检查：确保files是数组
+        if (!Array.isArray(files)) {
+            console.error('files参数不是数组:', files);
+            files = [];
         }
-    }
-    
-    // 应用搜索筛选
-    const searchTerm = searchInput.value.toLowerCase();
-    if (searchTerm) {
-        filteredFiles = searchFiles(filteredFiles, searchTerm);
-        console.log(`搜索筛选后文件数: ${filteredFiles.length}`);
-    }
-    
-    // 应用标签筛选
-    if (currentCategory !== 'all' && selectedTags[currentCategory]?.length > 0) {
-        console.log(`应用标签筛选，标签: ${selectedTags[currentCategory].join(', ')}`);
-        filteredFiles = await filterFilesByTags(filteredFiles, selectedTags[currentCategory]);
-        console.log(`标签筛选后文件数: ${filteredFiles.length}`);
-    }
-    
-    // 为每个文件加载对应类的标签
-    for (const file of filteredFiles) {
-        try {
-            const fileCategory = getFileCategory(file.type);
-            if (currentCategory === 'all' || fileCategory === currentCategory) {
-                file.tags = await window.electronAPI.getFileTags(fileCategory, file.path);
-            } else {
+        
+        // 参数检查：确保materialGrid存在
+        if (!materialGrid) {
+            console.error('materialGrid元素不存在');
+            return 0;
+        }
+        
+        // 备份现有UI内容，以防出错时恢复
+        const originalContent = materialGrid.innerHTML;
+        
+        // 创建文件副本以避免修改原数组
+        let filteredFiles = [...files];
+        
+        // 1. 应用分类筛选
+        if (currentCategory !== 'all') {
+            console.log(`应用分类筛选: ${currentCategory}`);
+            if (filteredFiles.length > 0) {
+                console.log(`筛选前示例: ${filteredFiles[0].name}`);
+            }
+            
+            // 应用分类筛选
+            filteredFiles = filterFilesByCategory(filteredFiles, currentCategory);
+            
+            console.log(`分类筛选后文件数: ${filteredFiles.length}`);
+        }
+        
+        // 2. 应用搜索筛选 - 特别确保搜索词正确获取
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm) {
+            console.log(`应用搜索筛选，关键词: "${searchTerm}"`);
+            const beforeSearchCount = filteredFiles.length;
+            filteredFiles = searchFiles(filteredFiles, searchTerm);
+            console.log(`搜索筛选后文件数: ${filteredFiles.length}/${beforeSearchCount}`);
+        }
+        
+        // 3. 应用标签筛选
+        if (currentCategory !== 'all' && selectedTags[currentCategory]?.length > 0) {
+            console.log(`应用标签筛选，标签: ${selectedTags[currentCategory].join(', ')}`);
+            filteredFiles = await filterFilesByTags(filteredFiles, selectedTags[currentCategory]);
+            console.log(`标签筛选后文件数: ${filteredFiles.length}`);
+        }
+        
+        // 为每个文件加载对应类的标签
+        // 这里可能原因网络请求导致延迟，先准备DOM再异步加载标签
+        const loadTagsPromises = filteredFiles.map(async (file) => {
+            try {
+                const fileCategory = getFileCategory(file.type);
+                if (currentCategory === 'all' || fileCategory === currentCategory) {
+                    file.tags = await window.electronAPI.getFileTags(fileCategory, file.path) || [];
+                } else {
+                    file.tags = [];
+                }
+            } catch (error) {
+                console.error('加载文件标签失败：', error);
                 file.tags = [];
             }
-        } catch (error) {
-            console.error('加载文件标签失败：', error);
-            file.tags = [];
+            return file;
+        });
+        
+        // 先清空网格，并显示"加载中"
+        materialGrid.innerHTML = '<div class="loading-indicator">加载中...</div>';
+        
+        // 等待所有标签加载完成
+        await Promise.all(loadTagsPromises);
+        
+        // 创建文档片段
+        const fragment = document.createDocumentFragment();
+        
+        console.log(`准备显示 ${filteredFiles.length} 个文件`);
+        
+        // 清空网格并添加文件卡片
+        materialGrid.innerHTML = '';
+        
+        // 检查是否有结果
+        if (filteredFiles.length === 0) {
+            // 无结果显示提示信息
+            const noResultsDiv = document.createElement('div');
+            noResultsDiv.className = 'no-results';
+            
+            if (searchTerm) {
+                noResultsDiv.innerHTML = `
+                    <p>未找到匹配 "${searchTerm}" 的结果</p>
+                    <button id="clear-search" class="secondary-btn">清除搜索</button>
+                `;
+            } else {
+                noResultsDiv.innerHTML = `<p>当前分类没有文件</p>`;
+            }
+            
+            materialGrid.appendChild(noResultsDiv);
+            
+            // 添加清除搜索按钮事件
+            const clearBtn = materialGrid.querySelector('#clear-search');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    window.displayFiles(window.allFiles);
+                });
+            }
+        } else {
+            // 添加文件卡片
+            for (const file of filteredFiles) {
+                const card = await createMaterialCard(file);
+                fragment.appendChild(card);
+            }
+            
+            materialGrid.appendChild(fragment);
         }
+        
+        // 更新所有分类的计数
+        updateCategoryCounts(files, countElements);
+        
+        // 恢复滚动位置
+        if (mainContent) {
+            requestAnimationFrame(() => {
+                mainContent.scrollTop = scrollPosition;
+            });
+        }
+        
+        document.body.classList.remove('loading-files');
+        console.log(`--------------------显示文件结束--------------------`);
+        return filteredFiles.length;
+    } catch (error) {
+        console.error('显示文件时发生错误:', error);
+        
+        // 显示错误信息到界面上
+        materialGrid.innerHTML = `
+            <div class="error-message">
+                <p>显示文件时发生错误</p>
+                <p>${error.message}</p>
+                <button id="retry-display" class="primary-btn">重试</button>
+            </div>
+        `;
+        
+        // 添加重试按钮事件
+        const retryBtn = materialGrid.querySelector('#retry-display');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => {
+                window.displayFiles(files);
+            });
+        }
+        
+        document.body.classList.remove('loading-files');
+        return 0;
     }
-    
-    // 创建文档片段
-    const fragment = document.createDocumentFragment();
-    
-    console.log(`准备显示 ${filteredFiles.length} 个文件`);
-    
-    // 添加文件卡片
-    for (const file of filteredFiles) {
-        const card = await createMaterialCard(file);
-        fragment.appendChild(card);
-    }
-
-    materialGrid.appendChild(fragment);
-
-    // 恢复滚动位置
-    requestAnimationFrame(() => {
-        mainContent.scrollTop = scrollPosition;
-    });
-
-    console.log(`--------------------显示文件结束--------------------`);
-    return filteredFiles.length;
 }
 
 /**

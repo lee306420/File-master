@@ -90,14 +90,77 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 将displayFiles函数添加到window对象，以便在其他模块中使用
     window.displayFiles = async (files) => {
-        return await displayFiles(
-            files, 
-            materialGrid, 
-            countElements, 
-            window.currentCategory, 
-            window.selectedTags, 
-            searchInput
-        );
+        try {
+            // 如果参数是undefined或null，使用全局allFiles
+            if (!files) {
+                console.log('使用全局文件列表，因为传入的files为:', files);
+                files = window.allFiles;
+            }
+            
+            // 确保files是数组且有length属性
+            if (!Array.isArray(files)) {
+                console.error('displayFiles 需要数组参数，但收到:', typeof files);
+                files = window.allFiles || [];
+            }
+            
+            // 确保 materialGrid 存在
+            const materialGrid = document.getElementById('material-grid');
+            if (!materialGrid) {
+                console.error('找不到素材网格元素');
+                return 0;
+            }
+            
+            // 确保 searchInput 存在
+            const searchInput = document.getElementById('search');
+            if (!searchInput) {
+                console.error('找不到搜索输入框元素');
+                return 0;
+            }
+            
+            // 保存当前状态，用于调试
+            console.log(`准备显示文件，参数情况:
+                - 文件数量: ${files.length}
+                - 当前分类: ${window.currentCategory}
+                - 搜索词: ${searchInput.value}
+                - 已选标签: ${JSON.stringify(window.selectedTags)}
+            `);
+            
+            // 调用实际的displayFiles函数
+            return await displayFiles(
+                files, 
+                materialGrid, 
+                countElements, 
+                window.currentCategory, 
+                window.selectedTags, 
+                searchInput
+            );
+        } catch (error) {
+            console.error('displayFiles 函数执行错误:', error);
+            
+            // 错误处理 - 避免界面完全空白
+            const materialGrid = document.getElementById('material-grid');
+            if (materialGrid) {
+                // 只有在没有内容时才添加错误信息
+                if (materialGrid.children.length === 0) {
+                    materialGrid.innerHTML = `
+                        <div class="error-message">
+                            <p>显示文件时发生错误</p>
+                            <p>${error.message}</p>
+                            <button id="retry-display">重试</button>
+                        </div>
+                    `;
+                    
+                    // 添加重试按钮事件
+                    const retryBtn = document.getElementById('retry-display');
+                    if (retryBtn) {
+                        retryBtn.addEventListener('click', () => {
+                            window.displayFiles(window.allFiles);
+                        });
+                    }
+                }
+            }
+            return 0;
+        }
     };
 
     // 初始化函数
